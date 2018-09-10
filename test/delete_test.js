@@ -11,6 +11,7 @@ describe('Deleting a user record', () => {
     })
 
     it('deletes an instance of a model', (done) => {
+        // used when we already have access to a record and want to remove it
         newUser.remove()
             .then(() => UserModel.findOne({ name: "Charlie" }))
             .then((record) => { // second .then won't be called until the UserModel.findOne has completed
@@ -20,6 +21,7 @@ describe('Deleting a user record', () => {
     })
 
     it('deletes via the class remove method', (done) => {
+        // used when we want to remove a bunch of records that have the same property
         UserModel.remove({ name: "Charlie" })
             .then(() => UserModel.findOne({ name: "Charlie" }))
             .then(record => {
@@ -38,12 +40,11 @@ describe('Deleting a user record', () => {
     })
 
     it('deletes via the class findByIdAndRemove method', (done) => {
-        UserModel.findByIdAndRemove({ _id: newUser._id })
-            .then(() => UserModel.findById({ _id: newUser._id }))
+        UserModel.findByIdAndRemove(newUser._id)
+            .then(() => UserModel.findById(newUser._id))
             .then(record => {
                 assert(record === null);
                 done();
             })
-
     })
 })
