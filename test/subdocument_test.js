@@ -16,5 +16,43 @@ describe('Testing Sub-Documents', () => {
                         done();
                     })
             })
-    })
+    });
+
+    it('adds a subdocument to an existing record', (done) => {
+      const newUser = new UserModel({
+          name: "Charlie"
+      });
+
+      newUser.save()
+        .then(() => UserModel.findOne({ name: "Charlie" }))
+        .then(record => {
+            record.posts.push({ title: 'new post' });
+            record.save()
+                .then(UserModel.findOne({ posts: [{ title: 'new post' }]}))
+                .then(updatedRecord => {
+                    assert(updatedRecord.posts[0].title === 'new post');
+                    done();
+                });
+        });
+    });
+
+    it('removes a subdocument from an existing record', (done) => {
+        const newUser = new UserModel({
+            name: "Charlie",
+            posts: { title: 'post title' }
+        });
+  
+        newUser.save()
+          .then(() => UserModel.findOne({ name: "Charlie" }))
+          .then(record => {
+              record.posts[0].remove();
+              record.save()
+                .then(() => UserModel.findOne({ name: "Charlie" }))
+                .then(updatedRecord => {
+                    assert(updatedRecord.posts.length === 0);
+                    done();
+                })
+          })
+      });
 });
+
