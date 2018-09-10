@@ -28,4 +28,12 @@ describe('Reading users out of the database', () => {
                 done();
             })
     })
+
+    it('finds a user with a particular ID', (done) => {
+        UserModel.findOne({ _id: newUser._id })
+            .then(record => {
+                assert(record.name === "Charlie");
+                done();
+            })
+    })
 })
