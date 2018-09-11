@@ -12,7 +12,12 @@ before((done) => {
 
 // beforeEach drops the data added by the test before each test runs
 beforeEach((done) => {
-    mongoose.connection.collections.users.drop(() => {
-        done(); // this signals that the dropping has finished
+    const { users, comments, blogposts } = mongoose.connection.collections;
+    users.drop(() => {
+        comments.drop(() => {
+            blogposts.drop(() => {
+                done();
+            })
+        })
     })
 })

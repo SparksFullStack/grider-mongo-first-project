@@ -49,7 +49,7 @@ describe('Testing Sub-Documents', () => {
               record.save()
                 .then(() => UserModel.findOne({ name: "Charlie" }))
                 .then(updatedRecord => {
-                    assert(updatedRecord.posts.length === 0);
+                    assert(updatedRecord.posts.length === 0)
                     done();
                 })
           })
